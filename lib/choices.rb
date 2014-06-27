@@ -31,7 +31,7 @@ module Choices
     if defined? YAML::ENGINE
       # avoid using broken Psych in 1.9.2
       old_yamler = YAML::ENGINE.yamler
-      YAML::ENGINE.yamler = 'syck'
+      YAML::ENGINE.yamler = 'psych'
     end
     begin
       YAML::load(content)
