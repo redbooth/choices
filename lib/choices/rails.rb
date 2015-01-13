@@ -7,19 +7,21 @@ module Choices::Rails
         initialize_without_choices(*args, &block)
         @choices = Hashie::Mash.new
       end
-      
+
       alias :initialize_without_choices :initialize
       alias :initialize :initialize_with_choices
     end
   end
-  
-  def from_file(name)
+
+  def from_file(name, options = {})
     root = self.respond_to?(:root) ? self.root : Rails.root
     file = root + 'config' + name
-    
-    settings = Choices.load_settings(file, Rails.respond_to?(:env) ? Rails.env : RAILS_ENV)
+
+    selected_env = options[:environment]
+    selected_env ||= Rails.respond_to?(:env) ? Rails.env : RAILS_ENV
+    settings = Choices.load_settings(file, selected_env)
     @choices.update settings
-    
+
     settings.each do |key, value|
       self.send("#{key}=", value)
     end
