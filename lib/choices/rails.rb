@@ -28,7 +28,10 @@ module Choices::Rails
   end
 
   def respond_to?(method, include_private = false)
-    super(method) or method.to_s =~ /=$/ or (method.to_s =~ /\?$/ and @choices.key?($`))
+    super(method) or
+      method.to_s =~ /=$/ or
+      (method.to_s =~ /\?$/ and @choices.key?($`)) or
+      @choices.key?(method)
   end
 
   def[](key)
